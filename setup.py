@@ -1,14 +1,21 @@
+import pkg_resources
+from setuptools import setup
 from pathlib import Path
 
-from setuptools import setup
+with Path("requirements.txt").open() as requirements_txt:
+    install_requires = [
+        str(requirement)
+        for requirement in pkg_resources.parse_requirements(requirements_txt)
+    ]
 
 consts = {}
-#exec((Path("openhardwaremonitor") / "const.py").read_text(encoding="utf-8"), consts)  # noqa: S102
+exec((Path("openhardwaremonitor") / "const.py").read_text(encoding="utf-8"), consts)  # noqa: S102
 
 setup(
     name="pyOpenHardwareMonitor",
     packages=["openhardwaremonitor"],
-    install_requires=["aiohttp>=3.0.6"],
+    #install_requires=["aiohttp>=3.0.6"],
+    install_requires=install_requires,
     #package_data={"openhardwaremonitor": ["py.typed"]},
     version=consts["__version__"],
     description="A python3 library to communicate with an OpenHardwareMonitor remote server",
@@ -16,6 +23,7 @@ setup(
     author="Peter Åslund",
     author_email="peter@peteraslund.me",
     url="https://github.com/lazytarget/pyOpenHardwareMonitor",
+    license="MIT",
     classifiers=[
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
