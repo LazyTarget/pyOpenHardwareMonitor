@@ -10,8 +10,9 @@ from .exceptions import NotFoundError, OpenHardwareMonitorError, UnauthorizedErr
 
 _LOGGER = logging.getLogger(__name__)
 
+
 class API:
-    
+   
     DEFAULT_TIMEOUT = 10
 
     def __init__(
@@ -80,7 +81,7 @@ class API:
                     _LOGGER.info("Request limit exceeded, retrying in %s second", delay)
                     await asyncio.sleep(delay)
                     return await self.raw_request(uri, params, data, method, attempt=attempt + 1)
-                raise TractiveError("Request limit exceeded")
+                raise OpenHardwareMonitorError("Request limit exceeded")
 
             if "Content-Type" in response.headers and "application/json" in response.headers["Content-Type"]:
                 return await response.json()
