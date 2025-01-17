@@ -2,11 +2,11 @@
 
 import asyncio
 import json
-from openhardwaremonitor import OpenHardwareMonitor
+from openhardwaremonitor import openhardwaremonitor
 
 
 async def main():
-    ohm = OpenHardwareMonitor('192.168.1.114', 8085)
+    ohm = openhardwaremonitor.OpenHardwareMonitor('192.168.50.20', 8085)
     data = await ohm.get_data()
     print(json.dumps(data))
     await ohm._api.close()

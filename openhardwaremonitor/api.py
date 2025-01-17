@@ -23,7 +23,7 @@ class API:
         session=None,
         timeout=DEFAULT_TIMEOUT,
         retry_count=3,
-        retry_delay: callable[int] = None
+        retry_delay=None
     ):
         self._timeout = timeout
         self._close_session = False
@@ -87,7 +87,8 @@ class API:
             content = None
             if "Content-Type" in response.headers and "application/json" in response.headers["Content-Type"]:
                 content = await response.json()
-            content = await response.read()
+            else:
+                content = await response.read()
             _LOGGER.debug("Response %s, status: %s", response.url, response.status)
             _LOGGER.debug("Response content: %s", content)
             return content
