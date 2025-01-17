@@ -35,24 +35,15 @@ class OpenHardwareMonitorAPI:
             self._close_session = True
 
         self._retry_count = retry_count
-        self._retry_delay = retry_delay or (lambda attempt: 3**attempt + random.SystemRandom.uniform(0, 3))
+        self._retry_delay = retry_delay or (lambda attempt: 3**attempt + random.uniform(0, 3))
 
         self.API_URL = URL(f"http://{host}:{port}/")
-
-    async def authenticate(self):
-        """Perform authenticateion."""
-        # todo:
 
     def base_headers(self):
         return {
             "content-type": "application/json;charset=UTF-8",
             "accept": "application/json, text/plain, */*",
         }
-
-    async def auth_headers(self):
-        await self.authenticate()
-        # return {**self.base_headers(), **self._auth_headers}
-        return {**self.base_headers()}
 
     async def request(self, *args, **kwargs):
         """Perform request with error wrapping."""
@@ -75,7 +66,7 @@ class OpenHardwareMonitorAPI:
             method,
             self.API_URL.join(URL(uri)).update_query(params),
             json=data,
-            headers=await self.auth_headers(),
+            headers=self.base_headers(),
             timeout=self._timeout,
         ) as response:
             _LOGGER.debug("Request %s, status: %s", response.url, response.status)

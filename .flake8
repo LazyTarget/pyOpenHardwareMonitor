@@ -1,7 +1,13 @@
 [flake8]
 ignore =
-    # E501 = line too long
-    E501
+    # line too long
+    E501,
+
+    # insecure use of "random" module, prefer "random.SystemRandom",
+    DUO102,
+
+    # Standard pseudo-random generators are not suitable for security/cryptographic purposes
+    S311
 
 exclude = 
     # No need to traverse our git directory
