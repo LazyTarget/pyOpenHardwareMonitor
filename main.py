@@ -2,7 +2,7 @@
 
 import asyncio
 import json
-from openhardwaremonitor.api import OpenHardwareMonitorAPI
+from pyopenhardwaremonitor.api import OpenHardwareMonitorAPI
 
 
 async def main():

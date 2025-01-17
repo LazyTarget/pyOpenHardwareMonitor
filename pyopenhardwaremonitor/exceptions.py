@@ -1,4 +1,4 @@
-"""Exceptions for the OpenHardwareMonitor REST API."""
+"""Exceptions for the OpenHardwareMonitor API."""
 
 
 class OpenHardwareMonitorError(Exception):

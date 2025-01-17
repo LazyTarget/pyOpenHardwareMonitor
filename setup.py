@@ -9,14 +9,14 @@ with Path("requirements.txt").open() as requirements_txt:
     ]
 
 consts = {}
-exec((Path("openhardwaremonitor") / "const.py").read_text(encoding="utf-8"), consts)  # noqa: S102
+exec((Path("pyopenhardwaremonitor") / "const.py").read_text(encoding="utf-8"), consts)  # noqa: S102
 
 setup(
-    name="pyOpenHardwareMonitor",
-    packages=["openhardwaremonitor"],
+    name="pyopenhardwaremonitor",
+    packages=["pyopenhardwaremonitor"],
     install_requires=install_requires,
     version=consts["__version__"],
-    description="A python3 library to communicate with an OpenHardwareMonitor remote server",
+    description="A python3 library to communicate with an Open Hardware Monitor remote server",
     python_requires=">=3.11.0",
     author="Peter Åslund",
     author_email="peter@peteraslund.me",

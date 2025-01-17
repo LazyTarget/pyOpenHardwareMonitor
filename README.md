@@ -5,7 +5,7 @@ Python3 library for getting data from [Open Hardware Monitor](https://openhardwa
 ## Install
 
 ```
-pip3 install pyOpenHardwareMonitor
+pip3 install pyopenhardwaremonitor
 ```
 
 ## Example
@@ -13,14 +13,15 @@ pip3 install pyOpenHardwareMonitor
 ```
 import asyncio
 import json
-from openhardwaremonitor import OpenHardwareMonitor
+from pyopenhardwaremonitor.api import OpenHardwareMonitorAPI
 
 async def main():
-    ohm = OpenHardwareMonitor('192.168.1.114', 8085)
+    ohm = OpenHardwareMonitorAPI('192.168.1.114', 8085)
     data = await ohm.get_data()
-    json.dumps(data)
-    await ohm._api.close()
+    print(json.dumps(data))
+    await ohm.close()
 
 if __name__ == '__main__':
     asyncio.run(main())
+
 ```
