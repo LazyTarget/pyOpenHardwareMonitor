@@ -9,3 +9,6 @@ class OpenHardwareMonitor:
         json = await self._api.request(f"data.json")
         return json
     
+    async def close(self):
+        return await self._api.close()
+    

@@ -83,9 +83,13 @@ class API:
                     return await self.raw_request(uri, params, data, method, attempt=attempt + 1)
                 raise OpenHardwareMonitorError("Request limit exceeded")
 
+            content = None
             if "Content-Type" in response.headers and "application/json" in response.headers["Content-Type"]:
-                return await response.json()
-            return await response.read()
+                content = await response.json()
+            content = await response.read()
+            _LOGGER.debug("Response %s, status: %s", response.url, response.status)
+            _LOGGER.debug("Response content: %s", content)
+            return content
 
     async def authenticate(self):
         """Perform authenticateion."""
