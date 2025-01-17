@@ -11,7 +11,7 @@ from .exceptions import NotFoundError, OpenHardwareMonitorError, UnauthorizedErr
 _LOGGER = logging.getLogger(__name__)
 
 
-class API:
+class OpenHardwareMonitorAPI:
 
     DEFAULT_TIMEOUT = 10
 
@@ -38,6 +38,10 @@ class API:
         self._retry_delay = retry_delay or (lambda attempt: 3**attempt + random.SystemRandom.uniform(0, 3))
 
         self.API_URL = URL(f"http://{host}:{port}/")
+
+    async def authenticate(self):
+        """Perform authenticateion."""
+        # todo:
 
     def base_headers(self):
         return {
@@ -93,9 +97,9 @@ class API:
             _LOGGER.debug("Response content: %s", content)
             return content
 
-    async def authenticate(self):
-        """Perform authenticateion."""
-        # todo:
+    async def get_data(self):
+        json = await self.request("data.json")
+        return json
 
     async def close(self):
         """Close the session."""

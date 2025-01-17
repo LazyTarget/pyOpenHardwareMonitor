@@ -2,14 +2,14 @@
 
 import asyncio
 import json
-from openhardwaremonitor import openhardwaremonitor
+from openhardwaremonitor.api import OpenHardwareMonitorAPI
 
 
 async def main():
-    ohm = openhardwaremonitor.OpenHardwareMonitor('192.168.50.20', 8085)
+    ohm = OpenHardwareMonitorAPI('192.168.50.20', 8085)
     data = await ohm.get_data()
     print(json.dumps(data))
-    await ohm._api.close()
+    await ohm.close()
 
 if __name__ == '__main__':
     asyncio.run(main())
