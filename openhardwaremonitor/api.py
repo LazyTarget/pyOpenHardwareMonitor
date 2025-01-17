@@ -23,7 +23,7 @@ class API:
         session=None,
         timeout=DEFAULT_TIMEOUT,
         retry_count=3,
-        retry_delay=lambda attempt: 3**attempt + random.uniform(0, 3)
+        retry_delay: callable[int] = None
     ):
         self._timeout = timeout
         self._close_session = False
@@ -35,7 +35,7 @@ class API:
             self._close_session = True
 
         self._retry_count = retry_count
-        self._retry_delay = retry_delay
+        self._retry_delay = retry_delay or (lambda attempt: 3**attempt + random.SystemRandom.uniform(0, 3))
 
         self.API_URL = URL(f"http://{host}:{port}/")
 
