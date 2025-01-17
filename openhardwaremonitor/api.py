@@ -7,12 +7,11 @@ from yarl import URL
 
 from .exceptions import NotFoundError, OpenHardwareMonitorError, UnauthorizedError
 
-
 _LOGGER = logging.getLogger(__name__)
 
 
 class API:
-   
+
     DEFAULT_TIMEOUT = 10
 
     def __init__(
@@ -32,7 +31,7 @@ class API:
             loop = loop or asyncio.get_event_loop()
             self.session = aiohttp.ClientSession(raise_for_status=True)
             self._close_session = True
-        
+
         self._retry_count = retry_count
         #self._retry_delay = retry_delay
 
@@ -43,12 +42,12 @@ class API:
             "content-type": "application/json;charset=UTF-8",
             "accept": "application/json, text/plain, */*",
         }
-    
+
     async def auth_headers(self):
         await self.authenticate()
         # return {**self.base_headers(), **self._auth_headers}
         return {**self.base_headers()}
-        
+
     async def request(self, *args, **kwargs):
         """Perform request with error wrapping."""
         try:
@@ -61,7 +60,7 @@ class API:
             raise OpenHardwareMonitorError from error
         except Exception as error:
             raise OpenHardwareMonitorError from error
-        
+
     async def raw_request(  # pylint: disable=too-many-arguments
         self, uri, params=None, data=None, method="GET", attempt: int = 1
     ):
