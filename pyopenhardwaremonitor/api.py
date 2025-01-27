@@ -96,3 +96,9 @@ class OpenHardwareMonitorAPI:
         """Close the session."""
         if self.session and self._close_session:
             await self.session.close()
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, exc_type, exc, tb):
+        await self.close()
