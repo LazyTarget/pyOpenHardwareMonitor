@@ -44,7 +44,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "rel: Auto update version" || true"
+          git commit -m "rel: Auto update version" || true
       - name: Update tag
         shell: bash
         run: |
