@@ -44,9 +44,12 @@ jobs:
   update-version:
     runs-on: ubuntu-latest
     steps:
+      - name: print directory
+        shell: bash
+        run: ls -fl
       - name: Update version in const.py
         shell: bash
-        run: python3 .github/scripts/update_version_const.py --version ${{ github.ref }}
+        run: python3 ./../.github/scripts/update_version_const.py --version ${{ github.ref }}
       - name: check for changes
         shell: bash
         run: git status
