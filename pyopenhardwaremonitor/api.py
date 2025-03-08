@@ -7,6 +7,7 @@ from aiohttp.client_exceptions import ClientResponseError
 from yarl import URL
 
 from .exceptions import NotFoundError, OpenHardwareMonitorError, UnauthorizedError
+from .types import DataNode, SensorNode, SensorType
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -17,7 +18,7 @@ class OpenHardwareMonitorAPI:
     def __init__(
         self,
         host,
-        port,
+        port: int = 8085,
         loop=None,
         session=None,
         timeout=DEFAULT_TIMEOUT,
@@ -92,11 +93,53 @@ class OpenHardwareMonitorAPI:
                 content = await response.read()
             _LOGGER.debug("Response %s, status: %s", response.url, response.status)
             _LOGGER.debug("Response content: %s", content)
+            response.raise_for_status()
             return content
 
-    async def get_data(self):
-        json = await self.request("data.json")
-        return json
+    async def get_data(self) -> DataNode:
+        """Get data-tree from OHM remote server."""
+        return await self.request("data.json")
+
+    async def get_sensor_nodes(self) -> dict[str, list[SensorNode]]:
+        """Get the Sensor data grouped by Computer within the data-tree."""
+        root_node = await self.get_data()
+        return {
+            c["Text"]: [*OpenHardwareMonitorAPI._parse_sensor_nodes(c)]
+            for c in root_node["Children"]
+        }
+
+    @staticmethod
+    def _parse_sensor_nodes(
+        node: DataNode, parent_names: list[str] | None = None
+    ) -> list[SensorNode]:
+        """Recursively loop through child objects, finding the values."""
+        result: list[SensorNode] = []
+        if parent_names is None:
+            parent_names = []
+        parent_names = [*parent_names, node["Text"]]
+
+        if node.get("Children"):
+            for n in node["Children"]:
+                sub_nodes = OpenHardwareMonitorAPI._parse_sensor_nodes(n, parent_names)
+                result.extend(sub_nodes)
+        elif node.get("Value"):
+            return [
+                SensorNode(
+                    id=node.get("id"),
+                    Text=node.get("Text"),
+                    Min=node.get("Min"),
+                    Max=node.get("Max"),
+                    Value=node.get("Value"),
+                    ImageURL=node.get("ImageURL"),
+                    # Extra
+                    SensorId=node.get("SensorId"),
+                    Type=SensorType(node.get("Type")) if node.get("Type") else None,
+                    ParentNames=parent_names,
+                    FullName=" ".join(parent_names),
+                    ComputerName=parent_names[0],
+                )
+            ]
+        return result
 
     async def close(self):
         """Close the session."""

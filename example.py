@@ -11,7 +11,8 @@ async def main(host=None, port=8085):
 
     # Example when using `async with` syntax
     async with OpenHardwareMonitorAPI(host, port) as api:
-        data = await api.get_data()
+        # data = await api.get_data()
+        data = await api.get_sensor_nodes()
         j = json.dumps(data)
         print(j)
         return j
