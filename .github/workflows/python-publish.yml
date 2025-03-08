@@ -54,11 +54,11 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ inputs.GITHUB_TOKEN }}
+          github_token: ${{ github.token }}
       - name: Push tag change
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ inputs.GITHUB_TOKEN }}
+          github_token: ${{ github.token }}
           force: true
           tags: true
 
