@@ -19,7 +19,7 @@ permissions:
   contents: read
 
 jobs:
-  checkout:
+  release-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,37 +27,30 @@ jobs:
         with:
           python-version: "3.x"
 
-  update-version:
-    runs-on: ubuntu-latest
-    needs:
-      - checkout
-    steps:
       - name: print directory
         shell: bash
         run: ls -fl
       - name: Update version in const.py
         shell: bash
-        run: python3 ./../.github/scripts/update_version_const.py --version ${{ github.ref }}
+        run: python3 .github/scripts/update_version_const.py --version ${{ github.ref }}
       - name: check for changes
         shell: bash
         run: git status
-      - name: stage changed files
+      - name: stage const.py file (if changed)
         shell: bash
         run: git add pyopenhardwaremonitor/const.py
-      - name: Commit changed files
+      - name: Commit changed files (if changed)
         shell: bash
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "rel: Auto update version" || true"
-          
       - name: Update tag
         shell: bash
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git tag -fa ${{ github.event.release.tag_name }} -m "Auto update version: ${{ github.event.release.tag_name }}"
-
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
@@ -69,12 +62,6 @@ jobs:
           force: true
           tags: true
 
-  release-build:
-    runs-on: ubuntu-latest
-    needs:
-      - checkout
-      - update-version
-    steps:
       - name: Build release distributions
         run: |
           # NOTE: put your own distribution build steps here.
@@ -89,8 +76,6 @@ jobs:
   pypi-publish:
     runs-on: ubuntu-latest
     needs:
-      - checkout
-      - update-version
       - release-build
     permissions:
       # IMPORTANT: this permission is mandatory for trusted publishing
