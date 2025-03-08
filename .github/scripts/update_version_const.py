@@ -18,10 +18,12 @@ def update_version_const():
     ) as file:
         content = file.read()
 
+    version = version.replace("refs/tags/", "").lstrip("v")
+    print("Modified version: ", version)
     content = re.sub(
         pattern='__version__ = "(.+)"',
         string=content,
-        repl='__version__ = "' + version.lstrip("v") + '"',
+        repl='__version__ = "' + version + '"',
     )
 
     with open(
