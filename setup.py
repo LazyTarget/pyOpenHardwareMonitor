@@ -8,7 +8,7 @@ with Path("requirements.txt").open() as requirements_txt:
         for requirement in pkg_resources.parse_requirements(requirements_txt)
     ]
 
-consts = {}
+consts: dict = {}
 exec((Path("pyopenhardwaremonitor") / "const.py").read_text(encoding="utf-8"), consts)  # noqa: S102
 
 setup(

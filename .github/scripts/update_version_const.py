@@ -23,7 +23,7 @@ def update_version_const():
     content = re.sub(
         pattern='__version__ = "(.+)"',
         string=content,
-        repl='__version__ = "' + version + '"',
+        repl=f'__version__ = "{version}"',
     )
 
     with open(
