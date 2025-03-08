@@ -31,7 +31,7 @@ jobs:
         run: python3 -m ruff check .
 
       - name: "mypy"
-        run: mypy pyopenhardwaremonitor
+        run: mypy pyopenhardwaremonitor .github/scripts
 
       # - name: yaml-lint
       #   uses: ibiqlik/action-yamllint@v3
