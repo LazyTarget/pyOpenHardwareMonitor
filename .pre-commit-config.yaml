@@ -1,0 +1,28 @@
+---
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.7
+    hooks:
+      - id: ruff
+        args:
+          - --fix
+      - id: ruff-format
+        files: ^((pyopenhardwaremonitor|tests)/.+)?[^/]+\.(py|pyi)$
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        language: python
+        types: [file, yaml]
+        files: ^((pyopenhardwaremonitor|tests)/.+)?[^/]+\.(yaml|yml)$
+
+  - repo: https://github.com/sourcery-ai/sourcery
+    rev: v1.34.0
+    hooks:
+      - id: sourcery
+        # The best way to use Sourcery in a pre-commit hook:
+        # * review only changed lines:
+        # * omit the summary
+        args: [--diff=git diff HEAD, --no-summary]
+        stages: [pre-push]

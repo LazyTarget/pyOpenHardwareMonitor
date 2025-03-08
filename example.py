@@ -28,12 +28,13 @@ async def main(host=None, port=8085):
 def get_current_ip() -> str:
     """Gets the local IP-address of this machine"""
     import socket
+
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     return str(s.getsockname()[0])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # if running on Windows
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
