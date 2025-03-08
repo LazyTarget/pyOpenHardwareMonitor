@@ -25,10 +25,13 @@ jobs:
         run: python3 -m pip install -r requirements.txt
 
       - name: "Install linters"
-        run: python3 -m pip install ruff yamllint
+        run: python3 -m pip install ruff yamllint mypy
 
       - name: "ruff check ."
         run: python3 -m ruff check .
+
+      - name: "mypy"
+        run: mypy pyopenhardwaremonitor
 
       # - name: yaml-lint
       #   uses: ibiqlik/action-yamllint@v3

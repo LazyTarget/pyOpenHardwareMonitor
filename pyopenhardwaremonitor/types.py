@@ -34,14 +34,14 @@ class SensorType(str, Enum):
 class SensorNode(TypedDict):
     """Describes a data point node (smallest descendant, with info about their parents)."""
 
-    id: int
-    Text: str
-    Min: str
-    Value: str
-    Max: str
-    ImageURL: str
+    id: int | None
+    Text: str | None
+    Min: str | None
+    Value: str | None
+    Max: str | None
+    ImageURL: str | None
 
-    SensorId: str
+    SensorId: str | None
     Type: SensorType | None
 
     ComputerName: str

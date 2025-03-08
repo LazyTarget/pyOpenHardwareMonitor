@@ -98,8 +98,7 @@ class OpenHardwareMonitorAPI:
 
     async def get_data(self) -> DataNode:
         """Get data-tree from OHM remote server."""
-        json = await self.request("data.json")
-        return DataNode(json)
+        return await self.request("data.json")
 
     async def get_sensor_nodes(self) -> dict[str, list[SensorNode]]:
         """Get the Sensor data grouped by Computer within the data-tree."""
@@ -135,7 +134,7 @@ class OpenHardwareMonitorAPI:
                 # Extra
                 SensorId=node.get("SensorId"),
                 Type=SensorType(node.get("Type")) if node.get("Type") else None,
-                Paths=parentNames,
+                ParentNames=parentNames,
                 FullName=" ".join([*parentNames, node["Text"]]),
                 ComputerName=parentNames[0],
             )
