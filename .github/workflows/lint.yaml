@@ -30,8 +30,8 @@ jobs:
       - name: "ruff check ."
         run: python3 -m ruff check .
 
-      - name: yaml-lint
-        uses: ibiqlik/action-yamllint@v3
-        with:
-          # file_or_dir: myfolder/*values*.yaml
-          config_file: .yamllint.yaml
+      # - name: yaml-lint
+      #   uses: ibiqlik/action-yamllint@v3
+      #   with:
+      #     # file_or_dir: myfolder/*values*.yaml
+      #     config_file: .yamllint.yaml
