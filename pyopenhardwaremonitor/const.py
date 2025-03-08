@@ -1,3 +1,3 @@
 """Constants used by Open Hardware Monitor"""
 
-__version__ = "0.1.7"
+__version__ = "refs/tags/v0.2.3"
