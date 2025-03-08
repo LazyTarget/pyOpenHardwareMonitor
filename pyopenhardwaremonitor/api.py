@@ -12,7 +12,6 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class OpenHardwareMonitorAPI:
-
     DEFAULT_TIMEOUT = 10
 
     def __init__(
@@ -23,7 +22,7 @@ class OpenHardwareMonitorAPI:
         session=None,
         timeout=DEFAULT_TIMEOUT,
         retry_count=3,
-        retry_delay=None
+        retry_delay=None,
     ):
         self._timeout = timeout
         self._close_session = False
@@ -35,7 +34,9 @@ class OpenHardwareMonitorAPI:
             self._close_session = True
 
         self._retry_count = retry_count
-        self._retry_delay = retry_delay or (lambda attempt: 3**attempt + random.uniform(0, 3))
+        self._retry_delay = retry_delay or (
+            lambda attempt: 3**attempt + random.uniform(0, 3)
+        )
 
         self.API_URL = URL(f"http://{host}:{port}/")
 
@@ -76,11 +77,16 @@ class OpenHardwareMonitorAPI:
                     delay = self._retry_delay(attempt)
                     _LOGGER.info("Request limit exceeded, retrying in %s second", delay)
                     await asyncio.sleep(delay)
-                    return await self.raw_request(uri, params, data, method, attempt=attempt + 1)
+                    return await self.raw_request(
+                        uri, params, data, method, attempt=attempt + 1
+                    )
                 raise OpenHardwareMonitorError("Request limit exceeded")
 
             content = None
-            if "Content-Type" in response.headers and "application/json" in response.headers["Content-Type"]:
+            if (
+                "Content-Type" in response.headers
+                and "application/json" in response.headers["Content-Type"]
+            ):
                 content = await response.json()
             else:
                 content = await response.read()
