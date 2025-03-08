@@ -110,35 +110,35 @@ class OpenHardwareMonitorAPI:
 
     @staticmethod
     def _parse_sensor_nodes(
-        node: DataNode, parentNames: list[str] | None = None
+        node: DataNode, parent_names: list[str] | None = None
     ) -> list[SensorNode]:
         """Recursively loop through child objects, finding the values."""
         result: list[SensorNode] = []
-        if parentNames is None:
-            parentNames = []
+        if parent_names is None:
+            parent_names = []
+        parent_names = [*parent_names, node["Text"]]
 
         if node.get("Children"):
             for n in node["Children"]:
-                sub_nodes = OpenHardwareMonitorAPI._parse_sensor_nodes(
-                    n, [*parentNames, node["Text"]]
-                )
+                sub_nodes = OpenHardwareMonitorAPI._parse_sensor_nodes(n, parent_names)
                 result.extend(sub_nodes)
         elif node.get("Value"):
-            sensor = SensorNode(
-                id=node.get("id"),
-                Text=node.get("Text"),
-                Min=node.get("Min"),
-                Max=node.get("Max"),
-                Value=node.get("Value"),
-                ImageURL=node.get("ImageURL"),
-                # Extra
-                SensorId=node.get("SensorId"),
-                Type=SensorType(node.get("Type")) if node.get("Type") else None,
-                ParentNames=parentNames,
-                FullName=" ".join([*parentNames, node["Text"]]),
-                ComputerName=parentNames[0],
-            )
-            result.append(sensor)
+            return [
+                SensorNode(
+                    id=node.get("id"),
+                    Text=node.get("Text"),
+                    Min=node.get("Min"),
+                    Max=node.get("Max"),
+                    Value=node.get("Value"),
+                    ImageURL=node.get("ImageURL"),
+                    # Extra
+                    SensorId=node.get("SensorId"),
+                    Type=SensorType(node.get("Type")) if node.get("Type") else None,
+                    ParentNames=parent_names,
+                    FullName=" ".join(parent_names),
+                    ComputerName=parent_names[0],
+                )
+            ]
         return result
 
     async def close(self):
