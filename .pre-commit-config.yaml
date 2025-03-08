@@ -17,6 +17,11 @@ repos:
         types: [file, yaml]
         files: ^((pyopenhardwaremonitor|tests)/.+)?[^/]+\.(yaml|yml)$
 
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: 'v1.15.0'
+    hooks:
+      - id: mypy
+
   - repo: https://github.com/sourcery-ai/sourcery
     rev: v1.34.0
     hooks:
